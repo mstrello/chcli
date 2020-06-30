@@ -137,9 +137,7 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
         if show_subtotal:
             account_total += 1
             if current_account != ec2_instance['account']['name']:
-                if current_account == '':
-                    current_account = ec2_instance['account']['name']
-                else:
+                if current_account != '':
                     # Print subtotal
                     click.echo(sep)
                     click.echo(
@@ -147,8 +145,8 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
                         f' {account_total}'
                     )
                     click.echo(sep)
-                    current_account = ec2_instance['account']['name']
                     account_total = 0
+                current_account = ec2_instance['account']['name']
         click.echo(line_template.format(
             ec2_instance['account']['name'],
             ec2_instance['name'],
