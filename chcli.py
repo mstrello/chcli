@@ -90,11 +90,14 @@ def list_customer_accounts(config,customer_id):
     accounts = extract_json(res, url)
     total_accounts = len(accounts)
     # Print the list of accounts
+    line_template = '{:35.35} {:25.25} {:15.15} {:35.35}'
     sep = '-' * 120
-    click.echo('{:35.35} {:25.25} {:15.15} {:35.35}'.format('Name', 'Amazon Name', 'Account Type' ,'Payer Account'))
+    click.echo(line_template.format('Name', 'Amazon Name', 'Account Type',
+        'Payer Account'))
     click.echo(sep)
-    for account in sorted(accounts, key=lambda a: (a['cluster_name']+a['account_type']).lower()):
-        click.echo('{:35.35} {:25.25} {:^15} {:35.35}'.format(
+    for account in sorted(accounts, 
+        key=lambda a: (a['cluster_name']+a['account_type']).lower()):
+        click.echo(line_template.format(
             account['name'],
             account['amazon_name'],
             account['account_type'],
@@ -124,10 +127,13 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
         account_total = 0
         current_account = ''
     # Print the list of EC2 instances
+    line_template = '{:25.25} {:41.41} {:19.19} {:10.10} {:8.8}'
     sep = '-' * 108
-    click.echo('{:25.25} {:41.41} {:19.19} {:10.10} {:8.8}'.format('Account Name', 'Name', 'Instance Id' ,'Model', 'State'))
+    click.echo(line_template.format('Account Name', 'Name', 'Instance Id',
+        'Model', 'State'))
     click.echo(sep)
-    for ec2_instance in sorted(ec2_instances, key=lambda a: (a['account']['name']+a['name']).lower()):
+    for ec2_instance in sorted(ec2_instances, 
+        key=lambda a: (a['account']['name']+a['name']).lower()):
         if show_subtotal:
             account_total += 1
             if current_account != ec2_instance['account']['name']:
@@ -136,11 +142,14 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
                 else:
                     # Print subtotal
                     click.echo(sep)
-                    click.echo(f'EC2 instances in account {current_account}: {account_total}')
+                    click.echo(
+                        f'EC2 instances in account {current_account}:'
+                        f' {account_total}'
+                    )
                     click.echo(sep)
                     current_account = ec2_instance['account']['name']
                     account_total = 0
-        click.echo('{:25.25} {:41.41} {:19.19} {:10.10} {:8.8}'.format(
+        click.echo(line_template.format(
             ec2_instance['account']['name'],
             ec2_instance['name'],
             ec2_instance['instance_id'],
@@ -149,7 +158,8 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
         ))
     if show_subtotal:
         click.echo(sep)
-        click.echo(f'EC2 instances in account {current_account}: {account_total}')
+        click.echo(
+            f'EC2 instances in account {current_account}: {account_total}')
     click.echo(sep)
     click.echo(f'Total of EC2 instances: {total_ec2_instances}')
 
@@ -170,11 +180,14 @@ def list_customer_rds_instances(config,customer_id):
     rds_instances = extract_json(res, url)
     total_rds_instances = len(rds_instances)
     # Print the list of EC2 instances
+    line_template = '{:25.25} {:30.30} {:12.12} {:12.12} {:10.10}'
     sep = '-' * 94
-    click.echo('{:25.25} {:30.30} {:12.12} {:12.12} {:10.10}'.format('Account Name', 'Instance Id', 'Model', 'Engine' ,'State'))
+    click.echo(line_template.format('Account Name', 'Instance Id', 'Model', 
+        'Engine' ,'State'))
     click.echo(sep)
-    for rds_instance in sorted(rds_instances, key=lambda a: (a['account']['name']+a['instance_id']).lower()):
-        click.echo('{:25.25} {:30.30} {:12.12} {:12.12} {:10.10}'.format(
+    for rds_instance in sorted(rds_instances, 
+        key=lambda a: (a['account']['name']+a['instance_id']).lower()):
+        click.echo(line_template.format(
             rds_instance['account']['name'],
             rds_instance['instance_id'],
             rds_instance['flavor'],
