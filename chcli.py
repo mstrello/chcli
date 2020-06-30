@@ -25,7 +25,7 @@ pass_config = click.make_pass_decorator(Config)
 def cli(ctx):
     """
     chcli is a command line tool for extracting data from ClodHealth without 
-    to get into the console.  
+    get into the console.  
     """
     # Create a config object and remember it as the context object.
     # This way other commands can use it with the @pass_config decorator.
@@ -136,7 +136,7 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
                 else:
                     # Print subtotal
                     click.echo(sep)
-                    click.echo(f'Total EC2 instances in {current_account}: {account_total}')
+                    click.echo(f'EC2 instances in account {current_account}: {account_total}')
                     click.echo(sep)
                     current_account = ec2_instance['account']['name']
                     account_total = 0
@@ -147,6 +147,9 @@ def list_customer_ec2_instances(config,customer_id, show_subtotal):
             ec2_instance['instance_type']['api_name'],
             ec2_instance['state']
         ))
+    if show_subtotal:
+        click.echo(sep)
+        click.echo(f'EC2 instances in account {current_account}: {account_total}')
     click.echo(sep)
     click.echo(f'Total of EC2 instances: {total_ec2_instances}')
 
